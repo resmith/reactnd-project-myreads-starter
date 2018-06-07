@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
  */
 class BookSelectCategory extends PureComponent {
   selectOptionchange = (event) => {
-    const { bookId, changeShelf } = this.props;
+    const { book, changeShelf } = this.props;
     const newShelf = event.target.value;
-    changeShelf(bookId, newShelf);
+    changeShelf(book, newShelf);
   }
 
   render() {
@@ -31,7 +31,7 @@ class BookSelectCategory extends PureComponent {
           <option
             key={selectOption.val}
             value={selectOption.val}
-            disabled={selectOption.val === currentShelf || selectOption.val === 'txt' }
+            disabled={selectOption.val === currentShelf}
           >
             {selectOption.text}
           </option>
@@ -42,7 +42,9 @@ class BookSelectCategory extends PureComponent {
 }
 
 BookSelectCategory.propTypes = {
-  bookId: PropTypes.string.isRequired,
+  book: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+  }).isRequired,
   currentShelf: PropTypes.string.isRequired,
   changeShelf: PropTypes.func.isRequired,
 };

@@ -11,8 +11,7 @@ import BookShelf from './BookShelf.jsx';
  */
 class BookShelves extends Component {
   render() {
-    // console.log('BookShelves props:', this.props);
-    const { changeShelf } = this.props;
+    const { books, changeShelf } = this.props;
     const bookShelves = [
       { title: 'Currently Reading', shelf: 'currentlyReading' },
       { title: 'Want to Read', shelf: 'wantToRead' },
@@ -29,11 +28,11 @@ class BookShelves extends Component {
             {bookShelves.map(bookShelf => (
               <BookShelf
                 key={bookShelf.title}
-                title={bookShelf.title}
-                shelf={bookShelf.shelf}
+                shelfTitle={bookShelf.title}
+                books={books.filter(book => book.shelf === bookShelf.shelf)}
                 changeShelf={changeShelf}
               />
-                      ))}
+            ))}
           </div>
         </div>
         <div className="open-search">
@@ -45,6 +44,11 @@ class BookShelves extends Component {
 }
 
 BookShelves.propTypes = {
+  books: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
+  })).isRequired,
   changeShelf: PropTypes.func.isRequired,
 };
 

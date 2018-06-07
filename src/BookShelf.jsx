@@ -1,47 +1,33 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 
 /**
  * Renders a singular bookshelf
+ * TODO: Prefer to query for the books here to avoid large props being passed
+ *      down to here
  * @constructor
  * @props {object} book - The book including title, smallThumbnail, author
  * @props {function} changeShelf - Function for changing the shelf the book is on
  */
-class BookShelf extends Component {
-  state = {
-    books: [],
-  }
-  componentDidMount() {
-    // console.log('BookShelfCcomponentDidMount  this.props:', this.props);
-    // const { query } = this.props;
-
-    BooksAPI.getAll()
-    // BooksAPI.search(query)
-      .then((books) => {
-        this.setState(() => ({
-          books,
-        }));
-      });
-  }
-
+class BookShelf extends PureComponent {
   render() {
-    // console.log('BookShelf props:', this.props);
-    const { title, shelf, changeShelf } = this.props;
-    const filteredBooks = this.state.books.filter(book => book.shelf === shelf);
+    const { books, shelfTitle, changeShelf } = this.props;
 
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{title}</h2>
+        <h2 className="bookshelf-title">{shelfTitle}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {filteredBooks.map(book => (
+            {books.map(book => (
               <li key={book.id}>
-                <Book book={book} changeShelf={changeShelf} />
+                <Book
+                  book={book}
+                  changeShelf={changeShelf}
+                />
               </li>
-                    ))}
+            ))}
           </ol>
         </div>
       </div>
@@ -49,10 +35,20 @@ class BookShelf extends Component {
   }
 }
 
+BookShelf.defaultProps = {
+  shelfTitle: '',
+  books: [{ id: '', title: '', shelf: '' }],
+  changeShelf: function() {return ''},
+};
+
 BookShelf.propTypes = {
-  title: PropTypes.string.isRequired,
-  shelf: PropTypes.string.isRequired,
-  changeShelf: PropTypes.func.isRequired,
+  shelfTitle: PropTypes.string,
+  books: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
+  })),
+  changeShelf: PropTypes.func,
 };
 
 export default BookShelf;

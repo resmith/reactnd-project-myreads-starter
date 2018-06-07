@@ -28,7 +28,7 @@ class Book extends PureComponent {
           />
           <div className="book-shelf-changer">
             <BookSelectCategory
-              bookId={book.id}
+              book={book}
               currentShelf={book.shelf}
               changeShelf={changeShelf}
             />
@@ -50,7 +50,7 @@ Book.propTypes = {
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     author: PropTypes.array,
-  }),
+  }).isRequired,
   changeShelf: PropTypes.func.isRequired,
 };
 

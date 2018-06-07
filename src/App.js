@@ -1,4 +1,6 @@
 import React from 'react';
+// import { Route } from 'react-router-dom';
+
 import * as BooksAPI from './BooksAPI';
 
 // Components
@@ -35,28 +37,39 @@ class BooksApp extends React.Component {
 
 
   /**
-  * Change the shelf the book is on
+  * Change the shelf the book is on updating the Db
   * @param {number} bookId The id of the book that should be moved to a different shelf
   * @param {number} newShelf The shelf the book should be moved to
   * @returns {void}
    */
-    changeShelf = (bookId, newShelf) => {
-      console.log('changeShelf bookId, newShelf:', bookId, newShelf);
-      BooksAPI.update(bookId, newShelf)
+    changeShelf = (updatedBook, newShelf) => {
+      updatedBook.shelf = newShelf;
+      BooksAPI.update(updatedBook, newShelf)
         .then((books) => {
-          this.setState(() => ({
-            books,
+          this.setState((prevState) => ({
+            books: prevState.books.filter(book => book.id !== updatedBook.id).concat(updatedBook),
           }));
         });
     }
 
+
+
+
+
     render() {
+      // console.log('App this.state.books:', this.state.books);
       return (
         <div className="app">
           {this.state.showSearchPage ? (
             <BookSearch />
         ) : (
-          <BookShelves changeShelf={this.changeShelf} />
+          <div>
+            { this.state.books && this.state.books.length > 0 &&
+            <BookShelves
+              books={this.state.books}
+              changeShelf={this.changeShelf}
+          /> }
+        </div>
         )}
         </div>
       );

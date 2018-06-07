@@ -1,0 +1,13 @@
+feat: Got base application working with BookShelves, BookShelf, BookShelf
+
+Completed
+- Base application started with Udacity Started code
+- Created app as shell
+- Broke into seperate static components
+- Made components dynamic except for selection for showing currentShelf
+
+
+Next
+  - selection for showing currentShelf and moving to newShelf
+  - search
+  - routes/routing

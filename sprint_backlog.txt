@@ -1,0 +1,5 @@
+
+*** Sprint Backlog
+Make BookShelf heading linkable to /bookshef/[name]
+Make selecting Category part of a queue displayed on right
+  - Done button, when selected makes all the state updates

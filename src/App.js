@@ -1,13 +1,18 @@
-import React from 'react'
+import React from 'react';
 import * as BooksAPI from './BooksAPI';
 
 // Components
 import BookSearch from './BookSearch';
-import BookShelves from './BookShelves';
+import BookShelves from './BookShelves.jsx';
 
 // Styling
 import './App.css';
 
+/**
+ * Book App
+ * @abstract   Highest level of the application
+ * @param {void}  No parameters are passed in (URL only)
+ */
 class BooksApp extends React.Component {
   state = {
     /**
@@ -16,38 +21,46 @@ class BooksApp extends React.Component {
      * users can use the browser's back and forward buttons to navigate between
      * pages, as well as provide a good URL they can bookmark and share.
      */
-    showSearchPage: false
+    showSearchPage: false,
   }
 
   componentDidMount() {
-  BooksAPI.getAll()
-    .then((books) => {
-      this.setState(() => ({
-        books
-      }))
-    })
+    BooksAPI.getAll()
+      .then((books) => {
+        this.setState(() => ({
+          books,
+        }));
+      });
   }
 
-  changeShelf = (bookId, newShelf) => {
-  BooksAPI.update(bookId, newShelf)
-    .then((books) => {
-      this.setState(() => ({
-        books
-      }))
-    })
-  }
 
-  render() {
-    return (
-      <div className="app">
-        {this.state.showSearchPage ? (
-          <BookSearch />
+  /**
+  * Change the shelf the book is on
+  * @param {number} bookId The id of the book that should be moved to a different shelf
+  * @param {number} newShelf The shelf the book should be moved to
+  * @returns {void}
+   */
+    changeShelf = (bookId, newShelf) => {
+      console.log('changeShelf bookId, newShelf:', bookId, newShelf);
+      BooksAPI.update(bookId, newShelf)
+        .then((books) => {
+          this.setState(() => ({
+            books,
+          }));
+        });
+    }
+
+    render() {
+      return (
+        <div className="app">
+          {this.state.showSearchPage ? (
+            <BookSearch />
         ) : (
-            <BookShelves />
+          <BookShelves changeShelf={this.changeShelf} />
         )}
-      </div>
-    )
-  }
+        </div>
+      );
+    }
 }
 
-export default BooksApp
+export default BooksApp;

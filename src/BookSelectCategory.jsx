@@ -15,7 +15,6 @@ class BookSelectCategory extends PureComponent {
   }
 
   render() {
-    // console.log('BookSelectCategory:', this.props);
     const { currentShelf } = this.props;
     const selectOptions = [
       { val: 'txt', text: 'Move to...' },

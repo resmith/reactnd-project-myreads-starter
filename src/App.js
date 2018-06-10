@@ -10,6 +10,8 @@ import './App.css';
 
 /**
  * Book App
+ * Kept the App thin to decrease load time
+ * and prevent unloading unneccessary items (e.g. Books for Bookshelves when doing search)
  * @abstract   Highest level of the application
  * @param {void}  No parameters are passed in (URL only)
  */

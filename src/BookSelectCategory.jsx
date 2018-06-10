@@ -15,7 +15,7 @@ class BookSelectCategory extends PureComponent {
   }
 
   render() {
-    const { currentShelf } = this.props;
+    const { book } = this.props;
     const selectOptions = [
       { val: 'txt', text: 'Move to...' },
       { val: 'currentlyReading', text: 'Currently Reading' },
@@ -30,7 +30,7 @@ class BookSelectCategory extends PureComponent {
           <option
             key={selectOption.val}
             value={selectOption.val}
-            disabled={selectOption.val === currentShelf}
+            disabled={selectOption.val === book.shelf}
           >
             {selectOption.text}
           </option>
@@ -44,7 +44,6 @@ BookSelectCategory.propTypes = {
   book: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
-  currentShelf: PropTypes.string.isRequired,
   changeShelf: PropTypes.func.isRequired,
 };
 

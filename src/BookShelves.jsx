@@ -1,30 +1,10 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import Button from './modules/Button';
 import BookShelf from './BookShelf.jsx';
 
-// const Button = withRouter(({ history }) => (
-//   <button
-//     type="button"
-//     className="open-search"
-//     onClick={() => { history.push('/search'); }}
-//   >
-//     Add Books
-//   </button>
-// ));
-
-const Button = () => (
-  <Route render={({ history }) => (
-    <div className="open-search">
-      <a onClick={() => { history.push('/search'); }} >
-        Add Books
-      </a>
-    </div>
-  )} />
-)
-
 /**
- * Calls the invdividual "BookShelf" components, supplying which
+ * Calls the individual "BookShelf" components, supplying which
  *    BookShelf should be rendered
  * @param {function}  changeShelf function
  * @returns {component} BookShelf[s] [called for each item in BookShelves arrary]
@@ -49,7 +29,6 @@ class BookShelves extends Component {
         }));
       });
   }
-
 
 
   render() {
@@ -77,7 +56,7 @@ class BookShelves extends Component {
             ))}
           </div>
         </div>
-        <Button />
+        <Button title="Add Book" path={'/search'} cName="open-search"  />
       </div>
     );
   }

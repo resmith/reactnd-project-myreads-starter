@@ -1,27 +1,72 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import * as BooksAPI from './BooksAPI';
+import Button from './modules/Button';
+import BookShelf from './BookShelf.jsx';
 
+/**
+ * Calls the invdividual "BookShelf" components, supplying which
+ *    BookShelf should be rendered
+ * @param {function}  changeShelf function
+ * @returns {component} BookShelf[s] [called for each item in BookShelves arrary]
+ */
 class BookSearch extends Component {
+  componentWillMount() {
+    this.setState(() => ({
+      query: '',
+      books: [],
+    }));
+  }
 
-  render () {
+  updateQuery = (event) => {
+    const val = event.target.value;
+    console.log('updateQuery event.target.value:', val);
+    this.setState({ query: val });
+    if (val && val.length > 0) {
+      BooksAPI.search(val)
+        .then((books) => {
+          console.log('updateQuery books:', books);
+          this.setState(() => ({ books }));
+        });
+    }
+
+  }
+
+  changeShelf = (updatedBook, newShelf) => {
+    const newUpdatedBook = updatedBook;
+    newUpdatedBook.shelf = newShelf;
+    BooksAPI.update(updatedBook, newShelf)
+      .then((result) => {
+        this.setState((prevState) => ({
+          books: prevState.books.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook),
+        }));
+      });
+  }
+
+  render() {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+          {/* <Button title="Close" path={'/bookshelves'} cName="close-search"  /> */}
+          <Button title="Close" path={'/bookshelves'} cName="close-search"  />
           <div className="search-books-input-wrapper">
-            {/*
-              NOTES: The search from BooksAPI is limited to a particular set of search terms.
-              You can find these search terms here:
-              https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-              However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-              you don't find a specific author or title. Every search is limited by search terms.
-            */}
-            <input type="text" placeholder="Search by title or author"/>
+            <input
+              type="text"
+              placeholder="Search by title or author"
+              value={this.state.query}
+              onChange={ this.updateQuery }
+            />
 
           </div>
+
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          { this.state.books && this.state.books.length > 0 &&
+          <BookShelf
+            key=''
+            shelfTitle=''
+            books={this.state.books}
+            changeShelf={this.changeShelf}
+          />}
         </div>
       </div>
 

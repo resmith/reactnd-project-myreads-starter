@@ -14,23 +14,16 @@ An updated README that describes the project and has instructions for installing
 
 *** Main Page
 Does the main page show three categories (or “bookshelves”) for books (currently reading, want to read, and read)?
-
 The main page shows 3 shelves for books, and each book is shown on the correct shelf.
-
 Does the main page allow users to move books between shelves?
-
 The main page shows a control that allows users to move books between shelves. The control should be tied to each book instance. The functionality of moving a book to a different shelf works correctly.
-
 Does information persist between page refreshes?
-
 When the browser is refreshed, the same information is displayed on the page.
 
 
 *** Search Page
 Does the search page have a search input that lets users search for books?
-
 1) The search page has a search input field.
-
 2) The search page behaves correctly:
 a) As the user types into the search field, books that match the query are displayed on the page.
 b) Search results are not shown when all of the text is deleted out of the search input box.

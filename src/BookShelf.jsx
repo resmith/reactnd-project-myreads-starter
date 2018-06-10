@@ -13,6 +13,7 @@ import Book from './Book';
  */
 class BookShelf extends PureComponent {
   render() {
+    console.log('BookShelf props:', this.props);
     const { books, shelfTitle, changeShelf } = this.props;
 
     return (
@@ -46,7 +47,6 @@ BookShelf.propTypes = {
   books: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    shelf: PropTypes.string.isRequired,
   })),
   changeShelf: PropTypes.func,
 };

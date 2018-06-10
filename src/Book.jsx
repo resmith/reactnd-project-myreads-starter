@@ -10,10 +10,14 @@ import BookSelectCategory from './BookSelectCategory.jsx';
  */
 class Book extends PureComponent {
   render() {
-    // console.log('Book this.props:', this.props);
+    console.log('Book this.props:', this.props);
     const { book, changeShelf } = this.props;
     const thumbnailUrl = book.imageLinks ? book.imageLinks.smallThumbnail : '';
     // console.log('Book thumbnailUrl:', thumbnailUrl);
+
+    // if (!this.props.book || this.props.book.length === 0) {
+    //   return;
+    // }
 
     return (
       <div className="book">
@@ -29,14 +33,14 @@ class Book extends PureComponent {
           <div className="book-shelf-changer">
             <BookSelectCategory
               book={book}
-              currentShelf={book.shelf}
+              currentShelf={book.shelf ? book.shelf : ''}
               changeShelf={changeShelf}
             />
           </div>
         </div>
-        <div className="book-title">{book.title}</div>
+        <div className="book-title">{book.title ? book.title : ''}</div>
         <div className="book-authors">
-          {book.authors.map((author, index) => (
+          {book.authors && book.authors.map((author, index) => (
             <i key={author}>{index > 0 ? ',' : '' } {author}</i>
                   ))}
         </div>
@@ -49,7 +53,6 @@ Book.propTypes = {
   book: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    author: PropTypes.array,
   }).isRequired,
   changeShelf: PropTypes.func.isRequired,
 };

@@ -10,7 +10,7 @@ import BookSelectCategory from './BookSelectCategory.jsx';
  */
 class Book extends PureComponent {
   render() {
-    console.log('Book this.props:', this.props);
+    // console.log('Book this.props:', this.props);
     const { book, changeShelf } = this.props;
     const thumbnailUrl = book.imageLinks ? book.imageLinks.smallThumbnail : '';
     // console.log('Book thumbnailUrl:', thumbnailUrl);

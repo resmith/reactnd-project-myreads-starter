@@ -15,7 +15,42 @@ class BookSearch extends Component {
       query: '',
       books: [],
     }));
+
+    BooksAPI.getAll()
+      .then((booksOnShelves) => {
+        const newBooksWithShelves = [];
+
+        booksOnShelves.forEach((book) => {
+          newBooksWithShelves.push({
+            id: book.id,
+            shelf: book.shelf,
+          });
+        });
+
+        this.setState(() => ({
+          booksOnShelves: newBooksWithShelves,
+        }));
+      });
   }
+
+mergeBooksWithShelves = (books, booksOnShelves) => {
+  console.log('mergeBooksWithShelves books,booksOnShelves: ', books,booksOnShelves);
+  if (!books || books.length === 0) { return []; }
+  const newBooks = books.slice(0);
+
+  let foundIndex = -1;
+  booksOnShelves.forEach((book) => {
+    foundIndex = newBooks.findIndex((newBook) => (newBook.id === book.id));
+    if (foundIndex > -1) {
+      console.log('mergeBooksWithShelves hit! foundIndex', foundIndex);
+      newBooks[foundIndex].shelf = book.shelf;
+    }
+  });
+
+  console.log('mergeBooksWithShelves newBooks: ', newBooks);
+  return (newBooks);
+}
+
 
   updateQuery = (event) => {
     const val = event.target.value;
@@ -24,11 +59,12 @@ class BookSearch extends Component {
     if (val && val.length > 0) {
       BooksAPI.search(val)
         .then((books) => {
-          console.log('updateQuery books:', books);
-          this.setState(() => ({ books }));
+          this.setState(() => ({
+            books: this.mergeBooksWithShelves(books, this.state.booksOnShelves),
+          }));
+
         });
     }
-
   }
 
   changeShelf = (updatedBook, newShelf) => {
@@ -43,6 +79,7 @@ class BookSearch extends Component {
   }
 
   render() {
+    console.log('Booksearch this.state:',this.state);
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -55,7 +92,6 @@ class BookSearch extends Component {
               value={this.state.query}
               onChange={ this.updateQuery }
             />
-
           </div>
 
         </div>

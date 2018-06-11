@@ -21,13 +21,14 @@ class BookShelf extends PureComponent {
         <h2 className="bookshelf-title">{shelfTitle} {booksOnShelf.count}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {booksOnShelf.map(book => (
-              <li key={book.id}>
-                <Book
-                  bookOnShelf={book}
-                  changeShelf={changeShelf}
-                />
-              </li>
+            { booksOnShelf && booksOnShelf.length > 0 &&
+              booksOnShelf.map(book => (
+                <li key={book.id}>
+                  <Book
+                    book={book}
+                    changeShelf={changeShelf}
+                  />
+                </li>
             ))}
           </ol>
         </div>

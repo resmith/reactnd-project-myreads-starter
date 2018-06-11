@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as BooksAPI from './BooksAPI';
 import BookSelectCategory from './BookSelectCategory.jsx';
 
 /**
@@ -9,10 +10,27 @@ import BookSelectCategory from './BookSelectCategory.jsx';
  * @props {function} changeShelf - Function for changing the shelf the book is on
  */
 class Book extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      book: {},
+    };
+
+    if (props.bookOnShelf && props.bookOnShelf.id) {
+      BooksAPI.get(this.props.bookOnShelf.id)
+        .then((book) => {
+          this.setState(() => ({
+            book,
+          }));
+        });
+    }
+  }
+
   render() {
-    console.log('Book this.props:', this.props);
-    console.log('Book this.state:', this.state);
-    const { book, changeShelf } = this.props;
+    // console.log('Book this.props:', this.props);
+    // console.log('Book this.state:', this.state);
+    const { changeShelf } = this.props;
+    const book = this.state.book ? Object.assign(this.state.book) : {};
     const thumbnailUrl = book.imageLinks ? book.imageLinks.smallThumbnail : '';
 
     // if (!this.props.book || this.props.book.length === 0) {
@@ -40,7 +58,7 @@ class Book extends Component {
             }
           </div>
         </div>
-        <div className="book-title">{book.title ? book.title : ''}</div>
+        <div className="book-title">{this.state.book.title ? this.state.book.title : ''}</div>
         <div className="book-authors">
           {book.authors && book.authors.map((author, index) => (
             <i key={author}>{index > 0 ? ',' : '' } {author}</i>
@@ -52,7 +70,7 @@ class Book extends Component {
 }
 
 Book.propTypes = {
-  book: PropTypes.shape({
+  bookOnShelf: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
   changeShelf: PropTypes.func.isRequired,

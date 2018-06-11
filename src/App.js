@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
+import ReactTooltip from 'react-tooltip';
 
 // Components
-import BookSearch from './BookSearch';
+import BookSearch from './BookSearch.jsx';
 import BookShelves from './BookShelves.jsx';
 
 // Styling
@@ -57,6 +58,7 @@ class BooksApp extends Component {
         <Route exact path='/' render={() => (<BookShelves changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
         <Route exact path='/bookshelves' render={() => (<BookShelves changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
         <Route exact path='/search' render={() => (<BookSearch changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
+        <ReactTooltip />
       </div>
     );
   }

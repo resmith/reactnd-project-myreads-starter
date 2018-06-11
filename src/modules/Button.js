@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+
 // e.g. <Button title="Add Book" path={'/search'} cName="open-search" />
 // const Button = ({ title, path, cName }) => (
 //   <Route render={({ history }) => (
@@ -16,12 +17,12 @@ import PropTypes from 'prop-types';
 
 class Button extends React.Component {
   render() {
-    const { title, path, cName } = this.props;
+    const { title, path, cName, dataTip } = this.props;
 
   return (
     <Route render={({ history }) => (
       <div className={cName}>
-        <a className={cName} onClick={() => { history.push(path); }} >
+        <a className={cName} data-tip={dataTip} onClick={() => { history.push(path); }} >
           {title}
         </a>
       </div>

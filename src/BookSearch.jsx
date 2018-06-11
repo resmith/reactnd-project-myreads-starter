@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import * as BooksAPI from './BooksAPI';
 import Button from './modules/Button';
 import BookShelf from './BookShelf.jsx';
@@ -11,38 +12,24 @@ import BookShelf from './BookShelf.jsx';
  * @returns {component} BookShelf[s] [called for each item in BookShelves arrary]
  */
 class BookSearch extends Component {
-  componentWillMount() {
-    this.setState(() => ({
+  constructor(props) {
+    super(props);
+    this.state = {
       query: '',
       books: [],
-    }));
-
-    BooksAPI.getAll()
-      .then((booksOnShelves) => {
-        const newBooksWithShelves = [];
-
-        booksOnShelves.forEach((book) => {
-          newBooksWithShelves.push({
-            id: book.id,
-            shelf: book.shelf,
-          });
-        });
-
-        this.setState(() => ({
-          booksOnShelves: newBooksWithShelves,
-        }));
-      });
+      includeBooksOnShelf: false,
+    };
   }
 
 mergeBooksWithShelves = (books, booksOnShelves) => {
-  if (!books || books.length === 0) { return []; }
+  // if (books === undefined || books.length === 0) { return []; }
+  if (books && books.items && books.items.length === 0) { return []; }
   const newBooks = books.slice(0);
 
   let foundIndex = -1;
   booksOnShelves.forEach((book) => {
-    foundIndex = newBooks.findIndex((newBook) => (newBook.id === book.id));
+    foundIndex = newBooks.findIndex(newBook => (newBook.id === book.id));
     if (foundIndex > -1) {
-      console.log('mergeBooksWithShelves hit! foundIndex', foundIndex);
       newBooks[foundIndex].shelf = book.shelf;
     }
   });
@@ -58,43 +45,67 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
       BooksAPI.search(val)
         .then((books) => {
           this.setState(() => ({
-            books: this.mergeBooksWithShelves(books, this.state.booksOnShelves),
+            books: this.mergeBooksWithShelves(books, this.props.booksOnShelves),
           }));
-
         });
     }
   }
 
+  toggleOnShelfFilter = () => {
+    this.setState(prev => ({
+      includeBooksOnShelf: !prev.includeBooksOnShelf,
+    }));
+  }
+
   render() {
+    // console.log('render state', this.state);
     const { changeShelf } = this.props;
 
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          {/* <Button title="Close" path={'/bookshelves'} cName="close-search"  /> */}
-          <Button title="Close" path={'/bookshelves'} cName="close-search"  />
+          <Button
+            title="Close"
+            path="/bookshelves"
+            cName="close-search"
+            dataTip="Back to bookshelf"
+          />
           <div className="search-books-input-wrapper">
             <input
               type="text"
               placeholder="Search by title or author"
               value={this.state.query}
-              onChange={ this.updateQuery }
+              onChange={this.updateQuery}
             />
           </div>
+          <button
+            className="toggle-filter"
+            onClick={this.toggleOnShelfFilter}
+            data-tip="Filter books with a shelf"
+          />
 
         </div>
         <div className="search-books-results">
           { this.state.books && this.state.books.length > 0 &&
-          <BookShelf
-            key=''
-            shelfTitle=''
-            booksOnShelf={this.state.books}
-            changeShelf={changeShelf}
-          />}
+            this.state.includeBooksOnShelf &&
+            <BookShelf
+              key=""
+              shelfTitle=""
+              booksOnShelf={this.state.books}
+              changeShelf={changeShelf}
+            />
+        }
+          { this.state.books && this.state.books.length > 0 &&
+            this.state.includeBooksOnShelf === false &&
+            <BookShelf
+              key=""
+              shelfTitle=""
+              booksOnShelf={this.state.books.filter(book => book.shelf === undefined)}
+              changeShelf={changeShelf}
+            />}
         </div>
       </div>
-
-    )
+    );
   }
 }
 

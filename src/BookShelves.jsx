@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as BooksAPI from './BooksAPI';
+import PropTypes from 'prop-types';
 import Button from './modules/Button';
 import BookShelf from './BookShelf.jsx';
 
@@ -10,28 +10,11 @@ import BookShelf from './BookShelf.jsx';
  * @returns {component} BookShelf[s] [called for each item in BookShelves arrary]
  */
 class BookShelves extends Component {
-  componentDidMount() {
-    BooksAPI.getAll()
-      .then((books) => {
-        this.setState(() => ({
-          books,
-        }));
-      });
-  }
-
-  changeShelf = (updatedBook, newShelf) => {
-    const newUpdatedBook = updatedBook;
-    newUpdatedBook.shelf = newShelf;
-    BooksAPI.update(updatedBook, newShelf)
-      .then((result) => {
-        this.setState((prevState) => ({
-          books: prevState.books.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook),
-        }));
-      });
-  }
-
 
   render() {
+    console.log('BookShelves this.props:', this.props);
+    const { booksOnShelves, changeShelf } = this.props;
+
     const bookShelves = [
       { title: 'Currently Reading', shelf: 'currentlyReading' },
       { title: 'Want to Read', shelf: 'wantToRead' },
@@ -46,20 +29,27 @@ class BookShelves extends Component {
         <div className="list-books-content">
           <div>
             {bookShelves.map(bookShelf => (
-              this.state && this.state.books && this.state.books.length > 0 &&
               <BookShelf
                 key={bookShelf.title}
                 shelfTitle={bookShelf.title}
-                books={this.state.books.filter(book => book.shelf === bookShelf.shelf)}
-                changeShelf={this.changeShelf}
+                booksOnShelf={booksOnShelves.filter(book => book.shelf === bookShelf.shelf)}
+                changeShelf={changeShelf}
               />
             ))}
           </div>
         </div>
-        <Button title="Add Book" path={'/search'} cName="open-search"  />
+        <Button title="Add Book" path="/search" cName="open-search" />
       </div>
     );
   }
 }
+
+BookShelves.propTypes = {
+  booksOnShelves: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
+  })).isRequired,
+  changeShelf: PropTypes.func.isRequired,
+};
 
 export default BookShelves;

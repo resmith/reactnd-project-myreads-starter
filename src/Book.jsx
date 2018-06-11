@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import * as BooksAPI from './BooksAPI';
 import BookSelectCategory from './BookSelectCategory.jsx';
 
 /**
@@ -9,9 +10,26 @@ import BookSelectCategory from './BookSelectCategory.jsx';
  * @props {function} changeShelf - Function for changing the shelf the book is on
  */
 class Book extends PureComponent {
+  componentWillMount() {
+    this.setState(() => ({
+      book: {},
+    }));
+
+    if (this.props.bookOnShelf && this.props.bookOnShelf.id) {
+      BooksAPI.get(this.props.bookOnShelf.id)
+        .then((book) => {
+          this.setState(() => ({
+            book,
+          }));
+        });
+    }
+  }
+
   render() {
-    // console.log('Book this.props:', this.props);
-    const { book, changeShelf } = this.props;
+    console.log('Book this.props:', this.props);
+    console.log('Book this.state:', this.state);
+    const { changeShelf } = this.props;
+    const book = this.state.book ? Object.assign(this.state.book) : {};
     const thumbnailUrl = book.imageLinks ? book.imageLinks.smallThumbnail : '';
     // console.log('Book thumbnailUrl:', thumbnailUrl);
 
@@ -31,14 +49,16 @@ class Book extends PureComponent {
             }}
           />
           <div className="book-shelf-changer">
+            { book.id &&
             <BookSelectCategory
               book={book}
               currentShelf={book.shelf ? book.shelf : ''}
               changeShelf={changeShelf}
             />
+            }
           </div>
         </div>
-        <div className="book-title">{book.title ? book.title : ''}</div>
+        <div className="book-title">{this.state.book.title ? this.state.book.title : ''}</div>
         <div className="book-authors">
           {book.authors && book.authors.map((author, index) => (
             <i key={author}>{index > 0 ? ',' : '' } {author}</i>
@@ -50,9 +70,9 @@ class Book extends PureComponent {
 }
 
 Book.propTypes = {
-  book: PropTypes.shape({
+  bookOnShelf: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
   }).isRequired,
   changeShelf: PropTypes.func.isRequired,
 };

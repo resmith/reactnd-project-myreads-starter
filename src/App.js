@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import * as BooksAPI from './BooksAPI';
 
 // Components
 import BookSearch from './BookSearch';
@@ -16,17 +17,53 @@ import './App.css';
  * @param {void}  No parameters are passed in (URL only)
  */
 class BooksApp extends Component {
+  componentWillMount() {
+    this.setState(() => ({
+      booksOnShelves: [],
+    }));
 
-    render() {
-      // console.log('App this.state.books:', this.state.books);
-      return (
-        <div>
-          <Route exact path='/' render={() => (<BookShelves />)}/>
-          <Route exact path='/bookshelves' render={() => (<BookShelves />)}/>
-          <Route exact path='/search' render={() => (<BookSearch />)}/>
-        </div>
-      );
-    }
+    BooksAPI.getAll()
+      .then((booksOnShelves) => {
+        const updatedBooksWithShelves = [];
+
+        booksOnShelves.forEach((book) => {
+          updatedBooksWithShelves.push({
+            id: book.id,
+            shelf: book.shelf,
+          });
+        });
+
+        this.setState(() => ({
+          booksOnShelves: updatedBooksWithShelves,
+        }));
+      });
+  }
+
+  changeShelf = (updatedBook, newShelf) => {
+    console.log('changeShelf updatedBook, newShelf',updatedBook, newShelf);
+    const newUpdatedBook = {};
+    newUpdatedBook.id = updatedBook.id;
+    newUpdatedBook.shelf = newShelf;
+    BooksAPI.update(updatedBook, newShelf)
+      .then((result) => {
+        console.log('changeShelf result:', result);
+        console.log('changeShelf booksOnShelves:', this.state.booksOnShelves.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook));
+        this.setState((prevState) => ({
+          booksOnShelves: prevState.booksOnShelves.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook),
+        }));
+      });
+  }
+
+  render() {
+    console.log('App this.state:', this.state);
+    return (
+      <div>
+        <Route exact path='/' render={() => (<BookShelves changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
+        <Route exact path='/bookshelves' render={() => (<BookShelves changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
+        <Route exact path='/search' render={() => (<BookSearch changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>
+      </div>
+    );
+  }
 }
 
 export default BooksApp;

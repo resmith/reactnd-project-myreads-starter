@@ -14,17 +14,17 @@ import Book from './Book';
 class BookShelf extends PureComponent {
   render() {
     console.log('BookShelf props:', this.props);
-    const { books, shelfTitle, changeShelf } = this.props;
+    const { booksOnShelf, shelfTitle, changeShelf } = this.props;
 
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{shelfTitle}</h2>
+        <h2 className="bookshelf-title">{shelfTitle} {booksOnShelf.count}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {books.map(book => (
+            {booksOnShelf.map(book => (
               <li key={book.id}>
                 <Book
-                  book={book}
+                  bookOnShelf={book}
                   changeShelf={changeShelf}
                 />
               </li>
@@ -38,15 +38,14 @@ class BookShelf extends PureComponent {
 
 BookShelf.defaultProps = {
   shelfTitle: '',
-  books: [{ id: '', title: '', shelf: '' }],
-  changeShelf: function() {return ''},
+  booksOnShelf: [{ id: '', title: '', shelf: '' }],
 };
 
 BookShelf.propTypes = {
   shelfTitle: PropTypes.string,
-  books: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+  booksOnShelf: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    title: PropTypes.string,
   })),
   changeShelf: PropTypes.func,
 };

@@ -11,6 +11,7 @@ class BookSelectCategory extends PureComponent {
   selectOptionchange = (event) => {
     const { book, changeShelf } = this.props;
     const newShelf = event.target.value;
+    console.log('selectOptionchange book, newShelf:',book, newShelf);
     changeShelf(book, newShelf);
   }
 

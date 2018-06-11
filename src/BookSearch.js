@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 import Button from './modules/Button';
 import BookShelf from './BookShelf.jsx';
@@ -67,19 +68,11 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
     }
   }
 
-  changeShelf = (updatedBook, newShelf) => {
-    const newUpdatedBook = updatedBook;
-    newUpdatedBook.shelf = newShelf;
-    BooksAPI.update(updatedBook, newShelf)
-      .then((result) => {
-        this.setState((prevState) => ({
-          books: prevState.books.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook),
-        }));
-      });
-  }
-
   render() {
-    console.log('Booksearch this.state:',this.state);
+    console.log('Booksearch this.state:', this.state);
+    console.log('Booksearch this.props:', this.props);
+    const { changeShelf } = this.props;
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -100,8 +93,8 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
           <BookShelf
             key=''
             shelfTitle=''
-            books={this.state.books}
-            changeShelf={this.changeShelf}
+            booksOnShelf={this.state.books}
+            changeShelf={changeShelf}
           />}
         </div>
       </div>
@@ -109,5 +102,14 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
     )
   }
 }
+
+BookSearch.propTypes = {
+  booksOnShelves: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired,
+  })).isRequired,
+  changeShelf: PropTypes.func.isRequired,
+};
+
 
 export default BookSearch;

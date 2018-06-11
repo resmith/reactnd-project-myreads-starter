@@ -35,7 +35,6 @@ class BookSearch extends Component {
   }
 
 mergeBooksWithShelves = (books, booksOnShelves) => {
-  console.log('mergeBooksWithShelves books,booksOnShelves: ', books,booksOnShelves);
   if (!books || books.length === 0) { return []; }
   const newBooks = books.slice(0);
 
@@ -48,14 +47,12 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
     }
   });
 
-  console.log('mergeBooksWithShelves newBooks: ', newBooks);
   return (newBooks);
 }
 
 
   updateQuery = (event) => {
     const val = event.target.value;
-    console.log('updateQuery event.target.value:', val);
     this.setState({ query: val });
     if (val && val.length > 0) {
       BooksAPI.search(val)
@@ -69,8 +66,6 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
   }
 
   render() {
-    console.log('Booksearch this.state:', this.state);
-    console.log('Booksearch this.props:', this.props);
     const { changeShelf } = this.props;
 
     return (

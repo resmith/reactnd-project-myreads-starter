@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -7,16 +7,25 @@ import PropTypes from 'prop-types';
  * @props {object} book - The book including title, smallThumbnail, author
  * @props {function} changeShelf - Function for changing the shelf the book is on
  */
-class BookSelectCategory extends PureComponent {
+class BookSelectCategory extends Component {
+  componentWillMount() {
+    this.setState(() => ({
+      book: this.props.book,
+    }));
+  }
+
   selectOptionchange = (event) => {
-    const { book, changeShelf } = this.props;
+    const { changeShelf } = this.props;
     const newShelf = event.target.value;
-    console.log('selectOptionchange book, newShelf:',book, newShelf);
-    changeShelf(book, newShelf);
+    changeShelf(this.state.book, newShelf);
+    const updatedBook = Object.assign(this.state.book, { shelf: newShelf });
+    this.setState(() => ({
+      book: updatedBook,
+    }));
+
   }
 
   render() {
-    const { book } = this.props;
     const selectOptions = [
       { val: 'txt', text: 'Move to...' },
       { val: 'currentlyReading', text: 'Currently Reading' },
@@ -24,14 +33,13 @@ class BookSelectCategory extends PureComponent {
       { val: 'read', text: 'Read' },
       { val: 'none', text: 'None' },
     ];
-
     return (
       <select onChange={this.selectOptionchange} >
         { selectOptions.map(selectOption => (
           <option
             key={selectOption.val}
             value={selectOption.val}
-            disabled={selectOption.val === book.shelf}
+            disabled={selectOption.val === this.state.book.shelf}
           >
             {selectOption.text}
           </option>

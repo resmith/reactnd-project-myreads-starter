@@ -40,14 +40,11 @@ class BooksApp extends Component {
   }
 
   changeShelf = (updatedBook, newShelf) => {
-    console.log('changeShelf updatedBook, newShelf',updatedBook, newShelf);
     const newUpdatedBook = {};
     newUpdatedBook.id = updatedBook.id;
     newUpdatedBook.shelf = newShelf;
     BooksAPI.update(updatedBook, newShelf)
       .then((result) => {
-        console.log('changeShelf result:', result);
-        console.log('changeShelf booksOnShelves:', this.state.booksOnShelves.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook));
         this.setState((prevState) => ({
           booksOnShelves: prevState.booksOnShelves.filter(book => book.id !== updatedBook.id).concat(newUpdatedBook),
         }));
@@ -55,7 +52,6 @@ class BooksApp extends Component {
   }
 
   render() {
-    console.log('App this.state:', this.state);
     return (
       <div>
         <Route exact path='/' render={() => (<BookShelves changeShelf={this.changeShelf} booksOnShelves={this.state.booksOnShelves} />)}/>

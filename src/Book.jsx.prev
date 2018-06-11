@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
-import BookSelectCategory from './BookSelectCategory.jsx';
+import BookSelectShelf from './BookSelectShelf.jsx';
 
 /**
  * Renders a book.
@@ -50,7 +50,7 @@ class Book extends Component {
           />
           <div className="book-shelf-changer">
             { book.id &&
-            <BookSelectCategory
+            <BookSelectShelf
               book={book}
               currentShelf={book.shelf ? book.shelf : ''}
               changeShelf={changeShelf}

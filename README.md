@@ -1,35 +1,41 @@
 # MyReads Project
 
-Final assessment project for Udacity's React Fundamentals course.
+Project: Udacity's MyReads Project for React Fundamentals course.
 
-Project: MyReads
-
-Purpose: Provide an applicaiton that allows users to put books on a shelf
+Purpose: Provide an application that allows users to put books on a shelf
   The shelves are: "CurrentlyReading","wantToRead","wantToRead"
 
-Specification:
-  See ProjectSpecs.js
+*** Installation
+1. Clone/Copy
+2. npm install
+3. npm start
+
+Dependencies:
+Dependent on Udacity BooksApi (see src/BooksAPI.js)
 
 *** Application Structure (App & Components)
+URL             ->    Component
+/               ->  Bookshelves
+/bookshelves    ->  Bookshelves
+/search         ->  BookSearch
+/bookshelf/[shelf]    ->  Bookshelf shelf= 1 of [CurrentlyReading, read, ...]
+
+
+*** Application Structure (Component Decompisition)
 App                 Source
-├── BookShelves     BooksAPI url:/books/shelf/
+├── BookShelves     BooksAPI url:
   ├── BookShelf     source: props.shelf
-      ├──  Books    source: props.book
         ├──  Book     source: props.book
+          ├──  BookSelectShelf     source: props.book
 
 ├── Search          
-      ├──  Books    source: props.book
+      ├──  BookShelf    source: props.book
         ├──  Book     source: props.book
+          ├──  BookSelectShelf     source: props.book
 
-URL Structure
-  url                   component       props
-  /                     BookShelves    shelves=["CurrentlyReading","wantToRead","wantToRead]
-  /bookshelves          BookShelves    shelves=["CurrentlyReading","wantToRead","wantToRead]
-  /bookShelf/[shelf]    BookShelf      shelf=["CurrentlyReading"]
-  /book                 Book           book
-  /search               Search         books
-
-
+├── BookShelf     source: props.shelf
+      ├──  Book     source: props.book
+        ├──  BookSelectShelf     source: props.book
 
 
   ** Common Components
@@ -40,81 +46,59 @@ URL Structure
       MoveToCategory              book
 
 
-Remember that good React design practice is to create new JS files for each component and use import/require statements to include them where they are needed.
+*** PROJECT SPECIFICATION
 
-## Backend Server
 
-To simplify your development process, we've provided a backend server for you to develop against. The provided file [`BooksAPI.js`](src/BooksAPI.js) contains the methods you will need to perform necessary operations on the backend:
+*** Application Setup
+CRITERIA MEETS SPECIFICATIONS
+Is the application easy to install and start?
+The application was created with create-react-app and requires only npm install and npm start to get it installed and launched.
+Does the application include README with clear installation and launch instructions?
+An updated README that describes the project and has instructions for installing and launching the project is included.
 
-* [`getAll`](#getall)
-* [`update`](#update)
-* [`search`](#search)
 
-### `getAll`
+*** Main Page
+Y Does the main page show three categories (or “bookshelves”) for books (currently reading, want to read, and read)?
+Y The main page shows 3 shelves for books, and each book is shown on the correct shelf.
+Y Does the main page allow users to move books between shelves?
+Y The main page shows a control that allows users to move books between shelves. The control should be tied to each book instance. The functionality of moving a book to a different shelf works correctly.
+Y Does information persist between page refreshes?
+Y When the browser is refreshed, the same information is displayed on the page.
 
-Method Signature:
 
-```js
-getAll()
-```
+*** Search Page
+Does the search page have a search input that lets users search for books?
+Y 1) The search page has a search input field.
+Y 2) The search page behaves correctly:
+Y a) As the user types into the search field, books that match the query are displayed on the page.
+Y b) Search results are not shown when all of the text is deleted out of the search input box.
+Y c) Invalid queries are handled and prior search results are not shown.
+Y d) The search works correctly when a book does not have a thumbnail or an author. (To test this, try searching for "poetry" and "biography").
+Y e) The user is able to search for multiple words, such as “artificial intelligence.”
 
-* Returns a Promise which resolves to a JSON object containing a collection of book objects.
-* This collection represents the books currently in the bookshelves in your app.
+Y Do the search results allow a user to categorize a book as “currently reading”, “want to read”, or “read”?
+Y Search results on the search page allow the user to select “currently reading”, “want to read”, or “read” to place the book in a certain shelf.
+Y If a book is assigned to a shelf on the main page and that book appears on the search page, the correct shelf should be selected on the search page. If that book's shelf is changed on the search page, that change should be reflected on the main page as well. The option "None" should be selected if a book has not been assigned to a shelf.
+Y Do selections made on the search page show up on the main page?
+Y When an item is categorized on the search page and the user navigates to the main page, it appears on that shelf in the main page.
 
-### `update`
 
-Method Signature:
+*** Routing
+Y Does the main page link to the search page?
+Y The main page contains a link to the search page. When the link is clicked, the search page is displayed and the URL in the browser’s address bar is /search.
+Y Does the search page link back to the main page?
+Y The search page contains a link to the main page. When the link is clicked, the main page is displayed and the URL in the browser’s address bar is /.
 
-```js
-update(book, shelf)
-```
 
-* book: `<Object>` containing at minimum an `id` attribute
-* shelf: `<String>` contains one of ["wantToRead", "currentlyReading", "read"]  
-* Returns a Promise which resolves to a JSON object containing the response data of the POST request
+*** Code Functionality
+Y Does the project code handle state management appropriately?
+Y Component state is passed down from parent components to child components. The state variable is not modified directly - setState() function is used correctly.
+Y Books have the same state on both the search page and the main application page: If a book is on a bookshelf, that is reflected in both locations.
+Y Is JSX formatted properly?
+Y All JSX code is formatted properly and functional.
 
-### `search`
 
-Method Signature:
-
-```js
-search(query)
-```
-
-* query: `<String>`
-* Returns a Promise which resolves to a JSON object containing a collection of a maximum of 20 book objects.
-* These books do not know which shelf they are on. They are raw results only. You'll need to make sure that books have the correct state while on the search page.
-
-## Important
-The backend API uses a fixed set of cached search results and is limited to a particular set of search terms, which can be found in [SEARCH_TERMS.md](SEARCH_TERMS.md). That list of terms are the _only_ terms that will work with the backend, so don't be surprised if your searches for Basket Weaving or Bubble Wrap don't come back with any results.
-
-## Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests
-
-## What You're Getting
-```bash
-├── CONTRIBUTING.md
-├── README.md - This file.
-├── SEARCH_TERMS.md # The whitelisted short collection of available search terms for you to use with your app.
-├── package.json # npm package manager file. It's unlikely that you'll need to modify this.
-├── public
-│   ├── favicon.ico # React Icon, You may change if you wish.
-│   └── index.html # DO NOT MODIFY
-└── src
-    ├── App.css # Styles for your app. Feel free to customize this as you desire.
-    ├── App.js # This is the root of your app. Contains static HTML right now.
-    ├── App.test.js # Used for testing. Provided with Create React App. Testing is encouraged, but not required.
-    ├── BooksAPI.js # A JavaScript API for the provided Udacity backend. Instructions for the methods are below.
-    ├── icons # Helpful images for your app. Use at your discretion.
-    │   ├── add.svg
-    │   ├── arrow-back.svg
-    │   └── arrow-drop-down.svg
-    ├── index.css # Global styles. You probably won't need to change anything here.
-    └── index.js # You should not need to modify this file. It is used for DOM rendering only..
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+Additional Items completed
+- On the BookShelves page, can click on a shelf heading and takes you to page for just that BookShelf
+- filter added to Search to toggle between showing and hiding books that have a shelf assigned
+-

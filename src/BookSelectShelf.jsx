@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
  * @props {object} book - The book including title, smallThumbnail, author
  * @props {function} changeShelf - Function for changing the shelf the book is on
  */
-class BookSelectCategory extends Component {
+class BookSelectShelf extends Component {
   componentWillMount() {
     this.setState(() => ({
       book: this.props.book,
@@ -22,10 +22,10 @@ class BookSelectCategory extends Component {
     this.setState(() => ({
       book: updatedBook,
     }));
-
   }
 
   render() {
+    const { showGlowingBorder } = this.props;
     const selectOptions = [
       { val: 'txt', text: 'Move to...' },
       { val: 'currentlyReading', text: 'Currently Reading' },
@@ -33,28 +33,38 @@ class BookSelectCategory extends Component {
       { val: 'read', text: 'Read' },
       { val: 'none', text: 'None' },
     ];
+    const cName = showGlowingBorder && this.state.book.shelf && this.state.book.shelf !== 'none'
+      ? 'glowing-border' : '';
+
     return (
-      <select onChange={this.selectOptionchange} >
-        { selectOptions.map(selectOption => (
-          <option
-            key={selectOption.val}
-            value={selectOption.val}
-            disabled={selectOption.val === this.state.book.shelf}
-          >
-            {selectOption.text}
-          </option>
-        ))}
-      </select>
+      <div className={cName} >
+        <select onChange={this.selectOptionchange} >
+          { selectOptions.map(selectOption => (
+            <option
+              key={selectOption.val}
+              value={selectOption.val}
+              disabled={selectOption.val === this.state.book.shelf}
+            >
+              {selectOption.text}
+            </option>
+          ))}
+        </select>
+      </div>
     );
   }
 }
 
-BookSelectCategory.propTypes = {
+BookSelectShelf.defaultProps = {
+  showGlowingBorder: false,
+};
+
+BookSelectShelf.propTypes = {
   book: PropTypes.shape({
     id: PropTypes.string.isRequired,
   }).isRequired,
+  showGlowingBorder: PropTypes.bool,
   changeShelf: PropTypes.func.isRequired,
 };
 
-export default BookSelectCategory;
+export default BookSelectShelf;
 // onChange="if (this.selectedIndex) changeShelf(this.bookId,selectOptions[this.selectedIndex] );"

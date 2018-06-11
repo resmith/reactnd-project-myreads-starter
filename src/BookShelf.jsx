@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
+import Button from './modules/Button';
 import Book from './Book';
 
 /**
@@ -13,12 +15,32 @@ import Book from './Book';
  */
 class BookShelf extends PureComponent {
   render() {
-    console.log('BookShelf props:', this.props);
-    const { booksOnShelf, shelfTitle, changeShelf } = this.props;
+    const {
+      booksOnShelf, shelfTitle, shelfURL, changeShelf,
+      showBackButton, showGlowingBorder,
+    } = this.props;
 
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{shelfTitle} {booksOnShelf.count}</h2>
+        { showBackButton &&
+          <div>
+            <div className="list-books-title" >
+              <h1>MyReads</h1>
+            </div>
+            <Button
+              title="Back"
+              path="/bookshelves"
+              cName="close-search2"
+              dataTip="Back to bookshelf"
+              style={{ display: 'inline' }}
+            />
+          </div>
+        }
+        <h2 className="bookshelf-title">
+          { shelfURL &&
+          <Link to={`${shelfURL}`}>{shelfTitle}({booksOnShelf.length})</Link>
+          }
+        </h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             { booksOnShelf && booksOnShelf.length > 0 &&
@@ -27,6 +49,7 @@ class BookShelf extends PureComponent {
                   <Book
                     book={book}
                     changeShelf={changeShelf}
+                    showGlowingBorder={showGlowingBorder}
                   />
                 </li>
             ))}
@@ -39,15 +62,21 @@ class BookShelf extends PureComponent {
 
 BookShelf.defaultProps = {
   shelfTitle: '',
+  shelfURL: '',
   booksOnShelf: [{ id: '', title: '', shelf: '' }],
+  showBackButton: false,
+  showGlowingBorder: false,
 };
 
 BookShelf.propTypes = {
   shelfTitle: PropTypes.string,
+  shelfURL: PropTypes.string,
   booksOnShelf: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
   })),
+  showBackButton: PropTypes.bool,
+  showGlowingBorder: PropTypes.bool,
   changeShelf: PropTypes.func,
 };
 

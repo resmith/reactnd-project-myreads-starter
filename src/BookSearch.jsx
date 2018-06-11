@@ -81,7 +81,8 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
           <button
             className="toggle-filter"
             onClick={this.toggleOnShelfFilter}
-            data-tip="Filter books with a shelf"
+            data-tip={this.state.includeBooksOnShelf ? 'Hide books on a shelf' :
+            'Include books on a shelf'}
           />
 
         </div>
@@ -90,18 +91,24 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
             this.state.includeBooksOnShelf &&
             <BookShelf
               key=""
-              shelfTitle=""
+              shelfTitle={this.state.query}
               booksOnShelf={this.state.books}
               changeShelf={changeShelf}
+              showGlowingBorder={true}
             />
         }
+        {/* TODO: When selecting a shelf for a book, this does not updateQuery
+          and remove them dynamically. Thought about correcting it but I
+          believe this is a better experience for the user. Confirm with
+          product manager  */}
           { this.state.books && this.state.books.length > 0 &&
             this.state.includeBooksOnShelf === false &&
             <BookShelf
               key=""
-              shelfTitle=""
+              shelfTitle={this.state.query}
               booksOnShelf={this.state.books.filter(book => book.shelf === undefined)}
               changeShelf={changeShelf}
+              showGlowingBorder={true}
             />}
         </div>
       </div>

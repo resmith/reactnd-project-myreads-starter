@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import * as BooksAPI from './BooksAPI';
 import Button from './modules/Button';
 import BookShelf from './BookShelf.jsx';
 
@@ -11,38 +10,10 @@ import BookShelf from './BookShelf.jsx';
  * @param {function}  changeShelf function
  * @returns {component} BookShelf[s] [called for each item in BookShelves arrary]
  */
-class BookShelves extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: '',
-      books: [],
-      includeBooksOnShelf: false,
-    };
-  }
-
-  componentWillMount() {
-    this.setState(() => ({
-      booksOnShelves: [],
-    }));
-
-    BooksAPI.getAll()
-      .then((books) => {
-        this.setState(() => ({
-          books,
-        }));
-      });
-  }
+class BookShelves extends PureComponent {
 
   render() {
-    console.log('BookShelves this.props:', this.props);
-    const { booksOnShelves, changeShelf } = this.props;
-
-    const bookShelves = [
-      { title: 'Currently Reading', shelf: 'currentlyReading' },
-      { title: 'Want to Read', shelf: 'wantToRead' },
-      { title: 'Read', shelf: 'read' },
-    ];
+    const { bookShelves, booksOnShelves, changeShelf } = this.props;
 
     return (
       <div className="list-books">
@@ -55,7 +26,8 @@ class BookShelves extends Component {
               <BookShelf
                 key={bookShelf.title}
                 shelfTitle={bookShelf.title}
-                booksOnShelf={this.state.books.filter(book => book.shelf === bookShelf.shelf)}
+                shelfURL={bookShelf.shelfURL}
+                booksOnShelf={booksOnShelves.filter(book => book.shelf === bookShelf.shelf)}
                 changeShelf={changeShelf}
               />
             ))}
@@ -73,6 +45,10 @@ class BookShelves extends Component {
 }
 
 BookShelves.propTypes = {
+  bookShelves: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    shelfURL: PropTypes.string.isRequired,
+  })).isRequired,
   booksOnShelves: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     shelf: PropTypes.string.isRequired,

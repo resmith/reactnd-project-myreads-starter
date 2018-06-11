@@ -22,7 +22,7 @@ class Button extends React.Component {
   return (
     <Route render={({ history }) => (
       <div className={cName} style={{ zindex: 50}}>
-        <a className={cName} data-tip={dataTip} onClick={() => { history.push(path); }} >
+        <a  data-tip={dataTip} onClick={() => { history.push(path); }} >
           {title}
         </a>
       </div>

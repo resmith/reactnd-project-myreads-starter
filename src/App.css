@@ -14,6 +14,8 @@ body, .app {
   padding: 10px 0;
   background: #2e7c31;
   text-align: center;
+  left: 400px;
+  top: 10px;
 }
 .list-books-title h1 {
   font-weight: 400;
@@ -97,6 +99,40 @@ body, .app {
   background-repeat: no-repeat;
   background-size: 28px;
   font-size: 0;
+  margin-right: 0;
+}
+
+.close-search2 {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  background-image: url('./icons/arrow-back.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  font-size: 0;
+}
+
+.open-search {
+
+}
+.open-search a {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #2e7d32;
+  background-image: url('./icons/add.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 28px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  font-size: 0;
 }
 
 .toggle-filter {
@@ -107,6 +143,19 @@ body, .app {
   height: 53px;
   background: white;
   background-image: url('./icons/icons8-slider-100.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  font-size: 0;
+}
+
+.image-button {
+  display: block;
+  top: 20px;
+  left: 15px;
+  width: 50px;
+  height: 53px;
+  background: white;
   background-position: center;
   background-repeat: no-repeat;
   background-size: 28px;
@@ -181,8 +230,17 @@ body, .app {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
 }
+
 .book-cover-title {
   padding: 20px 10px 0;
   text-align: center;
   font-size: 0.8em;
+}
+
+.glowing-border {
+    border: 8px solid #dadada;
+    border-radius: 7px;
+    outline: none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;
 }

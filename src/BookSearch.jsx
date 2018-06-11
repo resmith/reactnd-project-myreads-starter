@@ -106,7 +106,7 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
             <BookShelf
               key=""
               shelfTitle={this.state.query}
-              booksOnShelf={this.state.books.filter(book => book.shelf === undefined)}
+              booksOnShelf={this.state.books.filter(book => book.shelf === undefined || book.shelf === 'none')}
               changeShelf={changeShelf}
               showGlowingBorder={true}
             />}

@@ -144,3 +144,6 @@ Does the search page have a search input that lets users search for books?
 ## Additional Functionality Added
 - [x]  On the BookShelves page, can click on a shelf heading and takes you to page for just that BookShelf
 - [x] Filter added to Search to toggle between showing and hiding books that have a shelf assigned
+
+## Thanks
+Thanks to https://icons8.com for the https://icons8.com/icon/18636/slider

@@ -26,11 +26,17 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
   if (books && books.items && books.items.length === 0) { return []; }
   const newBooks = books.slice(0);
 
-  let foundIndex = -1;
-  booksOnShelves.forEach((book) => {
-    foundIndex = newBooks.findIndex(newBook => (newBook.id === book.id));
-    if (foundIndex > -1) {
-      newBooks[foundIndex].shelf = book.shelf;
+  let bookOnShelfIndex = -1;
+  newBooks.forEach((newBook, newBookIndex) => {
+    bookOnShelfIndex = booksOnShelves.findIndex(bookOnShelf => (newBook.id === bookOnShelf.id));
+    if (bookOnShelfIndex > -1) {
+      if (booksOnShelves[bookOnShelfIndex].shelf) {
+        newBooks[newBookIndex].shelf = booksOnShelves[bookOnShelfIndex].shelf;
+      } else {
+        newBooks[newBookIndex].shelf = 'none';
+      }
+    } else {
+      newBooks[newBookIndex].shelf = 'none';
     }
   });
 
@@ -48,6 +54,10 @@ mergeBooksWithShelves = (books, booksOnShelves) => {
             books: this.mergeBooksWithShelves(books, this.props.booksOnShelves),
           }));
         });
+    } else {
+      this.setState(() => ({
+        books: [],
+      }));
     }
   }
 
